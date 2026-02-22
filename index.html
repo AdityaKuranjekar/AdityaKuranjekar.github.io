@@ -5,38 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aditya Kuranjekar | Product Manager</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Syne:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(1deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
     }
     @keyframes wiggle {
       0%, 100% { transform: rotate(-2deg); }
       50% { transform: rotate(2deg); }
     }
     @keyframes pulse-soft {
-      0%, 100% { opacity: 0.6; }
+      0%, 100% { opacity: 0.5; }
       50% { opacity: 1; }
     }
     @keyframes draw-line {
       to { stroke-dashoffset: 0; }
     }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .float-animation { animation: float 6s ease-in-out infinite; }
     .float-animation-delayed { animation: float 6s ease-in-out infinite 2s; }
     .wiggle-animation { animation: wiggle 3s ease-in-out infinite; }
-    .pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+    .pulse-soft { animation: pulse-soft 2.5s ease-in-out infinite; }
+    .fade-up { animation: fade-up 0.6s ease-out both; }
+
     .hand-drawn-border {
       border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
     }
     .sticky-note {
-      box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.08);
       transform: rotate(-1deg);
+      transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+    }
+    .sticky-note:hover {
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.12);
+      transform: rotate(0deg) translateY(-2px);
     }
     .sticky-note:nth-child(even) { transform: rotate(1deg); }
+    .sticky-note:nth-child(even):hover { transform: rotate(0deg) translateY(-2px); }
+
     .dotted-connector {
       background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
       background-size: 8px 8px;
@@ -46,15 +58,27 @@
       background-repeat: no-repeat;
       background-position: bottom;
       background-size: 100% 12px;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
     }
     .card-shadow {
-      box-shadow: 8px 8px 0px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.05);
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.07), 0 2px 16px rgba(0,0,0,0.04);
+    }
+    .card-hover {
+      transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+    }
+    .card-hover:hover {
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.10), 0 4px 24px rgba(0,0,0,0.07);
+      transform: translateY(-3px);
     }
     .stamp-card {
-      border: 3px dashed currentColor;
-      border-radius: 8px;
+      border: 2.5px dashed currentColor;
+      border-radius: 10px;
       position: relative;
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .stamp-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     .stamp-card::before {
       content: '✓';
@@ -63,70 +87,147 @@
       right: -10px;
       background: #10B981;
       color: white;
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 12px;
+      font-weight: 700;
     }
     html, body { height: 100%; }
     .company-logo {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       object-fit: contain;
+      border-radius: 8px;
     }
+
+    /* Nav link active/hover */
+    .nav-link {
+      position: relative;
+      transition: color 0.2s ease-out;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: #FF8B7B;
+      border-radius: 2px;
+      transition: width 0.2s ease-out;
+    }
+    .nav-link:hover::after { width: 100%; }
+
     /* Collapsible experience cards */
     .experience-card {
-      transition: all 0.3s ease;
+      transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+    }
+    .experience-card:hover {
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.10), 0 4px 24px rgba(0,0,0,0.07);
     }
     .experience-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
       user-select: none;
     }
-    .experience-header:hover {
-      opacity: 0.8;
-    }
+    .experience-header:hover { opacity: 0.85; }
     .toggle-icon {
-      transition: transform 0.3s ease;
+      transition: transform 0.25s ease-out;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
+      color: #FF8B7B;
     }
-    .experience-card.collapsed .toggle-icon {
-      transform: rotate(-90deg);
-    }
+    .experience-card.collapsed .toggle-icon { transform: rotate(-90deg); }
     .experience-details {
-      transition: max-height 0.3s ease, opacity 0.3s ease;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
       overflow: hidden;
       opacity: 1;
-      max-height: 1000px;
+      max-height: 1200px;
     }
     .experience-card.collapsed .experience-details {
       max-height: 0;
       opacity: 0;
     }
+
+    /* Section tag */
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,139,123,0.12);
+      color: #FF8B7B;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    /* Metric emphasis */
+    .metric-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      line-height: 1;
+      color: #2D3047;
+    }
+
+    /* Mobile nav */
+    .mobile-nav-open { display: flex !important; }
+
     @media (max-width: 768px) {
       .experience-card {
-        border-left: 4px solid #FF8B7B;
-        padding-left: 12px;
+        border-left: 3px solid #FF8B7B;
+        padding-left: 16px;
       }
-      .experience-card.collapsed {
-        padding-bottom: 12px;
-      }
-      .nav-desktop {
-        display: none;
-      }
+      .nav-desktop { display: none; }
+      .hero-name { font-size: 2.8rem !important; line-height: 1.1; }
+      .hero-tagline { font-size: 1.25rem !important; }
     }
     @media (min-width: 769px) {
-      .toggle-icon {
-        display: none;
-      }
+      .toggle-icon { display: none; }
+    }
+
+    /* Subtle project card on hover */
+    .project-card {
+      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+    }
+    .project-card:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.10), 0 6px 28px rgba(0,0,0,0.08);
+    }
+    .project-card .project-img {
+      transition: transform 0.35s ease-out;
+    }
+    .project-card:hover .project-img {
+      transform: scale(1.04);
+    }
+
+    /* CTA button hover */
+    .cta-btn {
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.12);
+    }
+    .cta-btn:active { transform: translateY(0) scale(0.99); }
+
+    /* Divider line */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(45,48,71,0.1), transparent);
+      margin: 0 auto;
     }
   </style>
   <script>
@@ -154,349 +255,656 @@
     }
   </script>
   <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full bg-canvas overflow-auto">
-  <div id="app-wrapper" class="w-full min-h-full"><!-- Floating Navigation -->
-   <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-    <div class="bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 card-shadow flex items-center gap-6 nav-desktop"><span class="font-handwritten text-2xl text-coral">AK</span>
-     <div class="flex gap-4 text-sm font-body"><a href="#about" class="text-ink hover:text-coral transition-colors">About</a> <a href="#experience" class="text-ink hover:text-coral transition-colors">Journey</a> <a href="#leadership" class="text-ink hover:text-coral transition-colors">Leadership</a> <a href="#skills" class="text-ink hover:text-coral transition-colors">Skills</a> <a href="#contact" class="text-ink hover:text-coral transition-colors">Contact</a>
-     </div>
-    </div>
-   </nav><!-- Hero Section -->
-   <section class="relative pt-32 pb-20 px-6 overflow-hidden"><!-- Background decorations -->
-    <div class="absolute top-20 left-10 w-32 h-32 bg-peach/30 rounded-full blur-2xl"></div>
-    <div class="absolute top-40 right-20 w-40 h-40 bg-mint/40 rounded-full blur-2xl"></div>
-    <div class="absolute bottom-10 left-1/4 w-24 h-24 bg-lavender/30 rounded-full blur-xl"></div><!-- Dotted grid pattern -->
-    <div class="absolute inset-0 opacity-20 dotted-connector" style="background-size: 30px 30px;"></div>
-    <div class="max-w-6xl mx-auto relative">
-     <div class="grid lg:grid-cols-12 gap-8 items-center"><!-- Profile Image -->
-      <div class="lg:col-span-2 flex justify-center lg:justify-end relative z-20">
-       <div class="relative"><img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771354609/Aditya_Image_yydlgu.jpg" alt="Aditya Kuranjekar" loading="lazy" class="w-40 h-40 lg:w-48 lg:h-48 rounded-2xl card-shadow object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#e5e7eb'; this.style.borderRadius='16px';">
-        <div class="absolute -bottom-3 -right-3 bg-coral text-white w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold card-shadow">
-         PM
+ <body class="h-full bg-canvas overflow-auto font-body" style="font-family: 'Space Grotesk', sans-serif;">
+  <div id="app-wrapper" class="w-full min-h-full">
+
+    <!-- Floating Navigation -->
+    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-xl sm:max-w-2xl">
+      <div class="bg-white/92 backdrop-blur-md rounded-full px-5 py-2.5 card-shadow flex items-center justify-between nav-desktop" style="box-shadow: 4px 4px 0px rgba(0,0,0,0.07), 0 2px 20px rgba(0,0,0,0.06);">
+        <span class="font-handwritten text-2xl text-coral select-none">AK</span>
+        <div class="flex gap-5 text-sm font-body font-medium">
+          <a href="#about" class="nav-link text-ink/70 hover:text-coral">About</a>
+          <a href="#experience" class="nav-link text-ink/70 hover:text-coral">Journey</a>
+          <a href="#leadership" class="nav-link text-ink/70 hover:text-coral">Leadership</a>
+          <a href="#skills" class="nav-link text-ink/70 hover:text-coral">Skills</a>
+          <a href="#contact" class="nav-link text-ink/70 hover:text-coral">Contact</a>
         </div>
-       </div>
-      </div><!-- Left content -->
-      <div class="lg:col-span-5 space-y-6"><!-- Name badge -->
-       <div class="inline-flex items-center gap-3 bg-white rounded-full px-5 py-2 card-shadow float-animation"><span class="w-3 h-3 bg-green-400 rounded-full pulse-soft"></span> <span class="font-body text-sm text-ink/70">Building products</span>
-       </div>
-       <h1 id="hero-name" class="font-display text-6xl lg:text-7xl font-bold text-ink leading-tight">Aditya Kuranjekar</h1>
-       <div id="hero-title" class="flex flex-wrap items-center gap-3"><span class="bg-coral/20 text-coral px-4 py-2 rounded-full font-body text-sm font-medium">Product Manager</span> <span class="font-handwritten text-2xl text-ink/50">×</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full font-body text-sm font-medium">IIT Patna</span> <span class="font-handwritten text-2xl text-ink/50">×</span> <span class="bg-mint text-ink px-4 py-2 rounded-full font-body text-sm font-medium">IIM Bodh Gaya</span>
-       </div>
-       <p id="hero-tagline" class="font-display text-2xl lg:text-3xl text-ink/80 max-w-xl leading-relaxed">Building <span class="sketch-underline">user-first products</span> using research, strategy, and execution.</p><!-- CTA Buttons -->
-       <div class="flex flex-wrap gap-4 pt-4"><a href="#leadership" class="group relative">
-         <div class="bg-ink text-white px-8 py-4 rounded-2xl font-body font-medium card-shadow hover:scale-105 transition-transform">
-          View My Work
-         </div><!-- Hand-drawn arrow -->
-         <svg class="absolute -right-16 top-1/2 -translate-y-1/2 w-14 h-14 text-coral hidden lg:block" viewbox="0 0 60 60"><path d="M5 40 Q20 20 50 25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="100" style="animation: draw-line 1s ease forwards;" /> <path d="M42 18 L50 25 L42 32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
-         </svg></a> <a href="https://drive.google.com/drive/folders/1ilf73XtcqoJXcA6-w28FS4nePwLQojrI?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-sunshine text-ink px-8 py-4 rounded-2xl font-body font-medium card-shadow hover:scale-105 transition-transform"> Resume </a> <a href="#contact" class="bg-white text-ink px-8 py-4 rounded-2xl font-body font-medium card-shadow border-2 border-ink/10 hover:border-coral hover:scale-105 transition-all"> Let's Talk </a>
-       </div>
-      </div><!-- Right decorative cards -->
-      <div class="lg:col-span-5 relative h-96 hidden lg:block"><!-- Floating sticky notes -->
-       <div class="absolute top-0 right-0 bg-sunshine p-4 w-44 sticky-note float-animation">
-        <p class="font-handwritten text-lg text-ink/80">"Ship → Learn → Iterate"</p>
-       </div>
-       <div class="absolute top-24 left-0 bg-peach p-4 w-48 sticky-note float-animation-delayed">
-        <p class="font-handwritten text-lg text-ink/80">Product at intersection of tech + business</p>
-       </div>
-       <div class="absolute bottom-20 right-10 bg-mint p-4 w-44 sticky-note float-animation">
-        <p class="font-handwritten text-lg text-ink/80">User research = Product direction</p>
-       </div>
-       <div class="absolute bottom-0 left-10 bg-lavender p-4 w-48 sticky-note float-animation-delayed">
-        <p class="font-handwritten text-lg text-ink/80">From idea to execution</p>
-       </div><!-- Connector lines -->
-       <svg class="absolute inset-0 w-full h-full pointer-events-none" style="overflow: visible;"><path d="M100 50 Q150 100 80 150" stroke="#FF8B7B" stroke-width="2" stroke-dasharray="5,5" fill="none" opacity="0.5" /> <path d="M200 200 Q180 250 220 300" stroke="#D8F3DC" stroke-width="2" stroke-dasharray="5,5" fill="none" opacity="0.5" />
-       </svg>
+        <a href="https://drive.google.com/file/d/1Yex0mAjw8YFIsd_3ktQTgMWA3T_joMN2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-ink text-white text-xs px-4 py-2 rounded-full font-medium cta-btn hidden sm:block">Resume</a>
       </div>
-     </div>
-    </div>
-   </section><!-- About Section -->
-   <section id="about" class="py-20 px-6 relative">
-    <div class="max-w-6xl mx-auto">
-     <div class="flex items-center gap-4 mb-12">
-      <h2 class="font-display text-4xl font-bold text-ink">About Me</h2>
-      <div class="flex-1 h-px bg-ink/10"></div><span class="font-handwritten text-2xl text-coral -rotate-6">who dis?</span>
-     </div><!-- Overlapping cards layout -->
-     <div class="relative">
-      <div class="grid md:grid-cols-3 gap-6"><!-- Main bio card -->
-       <div class="md:col-span-2 bg-white p-8 rounded-3xl card-shadow relative z-10" style="transform: rotate(-0.5deg);">
-        <p id="about-intro" class="font-body text-lg text-ink/80 leading-relaxed mb-6">I'm a <span class="bg-coral/20 px-2 rounded">product-first thinker</span> working at the intersection of technology, strategy, and execution. With a dual foundation in Computer Science (IIT Patna) and Digital Business Management (IIM Bodh Gaya), I combine engineering rigor with business strategy. My approach: deep user insight → structured thinking → measurable outcomes.</p>
-        <p class="font-body text-ink/70 leading-relaxed">I've led product internships where I moved beyond task execution into real PM thinking—conducting user research, translating insights into roadmaps, defining workflows, and coordinating cross-functional teams with clarity and ownership. I obsess over understanding the "why" before building the "what," and I'm driven by building products that create genuine value. Whether it's aligning engineers and designers, scaling events to 2500+ users, or designing centralized execution systems, I treat every challenge as a product problem to be solved strategically.</p>
-       </div><!-- Strength cards -->
-       <div class="space-y-4">
-        <div class="bg-peach p-5 rounded-2xl sticky-note">
-         <h3 class="font-display font-semibold text-ink mb-1 text-sm">Research-Driven</h3>
-         <p class="font-body text-sm text-ink/70">Research → Personas → Strategy</p>
-        </div>
-        <div class="bg-mint p-5 rounded-2xl sticky-note">
-         <h3 class="font-display font-semibold text-ink mb-1 text-sm">Execution</h3>
-         <p class="font-body text-sm text-ink/70">From PRD to ship</p>
-        </div>
-        <div class="bg-lavender p-5 rounded-2xl sticky-note">
-         <h3 class="font-display font-semibold text-ink mb-1 text-sm">Leadership</h3>
-         <p class="font-body text-sm text-ink/70">Cross-functional alignment</p>
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-   </section><!-- Experience Section -->
-   <section id="experience" class="py-20 px-6 bg-cream relative overflow-hidden">
-    <div class="absolute top-0 right-0 w-64 h-64 bg-coral/10 rounded-full blur-3xl"></div>
-    <div class="max-w-6xl mx-auto">
-     <div class="flex items-center gap-4 mb-12"><span class="font-handwritten text-2xl text-ink/50 -rotate-6">my journey</span>
-      <h2 class="font-display text-4xl font-bold text-ink">Product Stories</h2>
-     </div>
-     <p class="font-body text-ink/60 mb-12 max-w-2xl">Product internships where I translated research into decisions, coordinated cross-functional execution, and brought clarity to chaos.</p><!-- Product Journey Cards -->
-     <div class="space-y-8"><!-- Journey 1: Skillify Me -->
-      <div class="experience-card bg-white rounded-3xl p-8 card-shadow relative overflow-hidden" id="exp-1">
-       <div class="absolute top-0 right-0 w-32 h-32 bg-coral/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-       <div class="experience-header mb-6" onclick="toggleExperience(event)"><span class="toggle-icon">▼</span>
-        <div class="flex-1">
-         <div class="flex flex-wrap items-center gap-4"><span class="bg-coral text-white px-4 py-1 rounded-full font-body text-sm font-medium">Oct – Dec 2025</span>
-          <div class="flex items-center gap-3"><img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771353171/Skillify_Logo_dtjkvm.jpg" alt="SkillifyMe" loading="lazy" class="company-logo" onerror="console.error('Logo failed:', this.src); this.style.display='none';"> <a href="https://www.skillifyme.co.in/" target="_blank" rel="noopener noreferrer" class="font-display font-bold text-xl text-ink hover:text-coral transition-colors">SkillifyMe</a>
-          </div><span class="font-body text-ink/50 text-sm">Remote</span>
-         </div>
-        </div>
-       </div><span class="font-body text-ink/60 text-sm mb-6 block">Product Intern</span>
-       <div class="experience-details">
-        <div class="grid md:grid-cols-4 gap-6">
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-coral">Problem</span>
-          <p class="font-body text-sm text-ink/70 mt-2">The team lacked clear user segmentation and a structured product direction. Cross-functional misalignment across design, tech, and growth slowed feature prioritization and GTM execution.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl relative"><span class="font-body text-sm font-semibold text-green-600">Action</span>
-          <p class="font-body text-sm text-ink/70 mt-2">Coordinated a 10+ member cross-functional team and conducted user research through surveys and discussions to identify key pain points. Built user personas, mapped journeys, and translated insights into prioritized features and roadmap inputs. Worked with design and engineering to align feature scope and supported GTM planning with clearer positioning and messaging.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-blue-600">Outcome</span>
-          <p class="font-body text-sm text-ink/70 mt-2">Improved alignment across teams on target users and product direction. Helped establish research-backed feature priorities and streamlined GTM preparation, enabling more focused execution and clearer product decisions.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-lavender">Tools &amp; Methods</span>
-          <div class="flex flex-wrap gap-2 mt-2"><span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Surveys</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Persona Mapping</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">User Research</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Cross-functional Coordination</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">GTM Planning</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Notion</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Miro</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Figma</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">ChatGPT</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Sheets</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Docs</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Jira</span>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-28 sm:pt-36 pb-20 px-5 sm:px-8 overflow-hidden">
+      <!-- Background decorations -->
+      <div class="absolute top-16 left-8 w-40 h-40 bg-peach/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-32 right-16 w-48 h-48 bg-mint/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-8 left-1/3 w-28 h-28 bg-lavender/25 rounded-full blur-2xl pointer-events-none"></div>
+      <!-- Dotted grid pattern -->
+      <div class="absolute inset-0 opacity-[0.15] dotted-connector" style="background-size: 28px 28px;"></div>
+
+      <div class="max-w-6xl mx-auto relative">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+
+          <!-- Profile Image -->
+          <div class="lg:col-span-2 flex justify-center lg:justify-end relative z-20">
+            <div class="relative group cursor-pointer">
+              <img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771354609/Aditya_Image_yydlgu.jpg"
+                   alt="Aditya Kuranjekar" loading="lazy"
+                   class="w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-2xl card-shadow object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+                   onerror="this.style.background='#e5e7eb'; this.style.borderRadius='16px';">
+              <div class="absolute -bottom-3 -right-3 bg-coral text-white w-11 h-11 rounded-full flex items-center justify-center text-sm font-bold card-shadow select-none">PM</div>
+            </div>
           </div>
-         </div>
-        </div>
-       </div>
-      </div><!-- Journey 2: Inditronix AI Labs -->
-      <div class="experience-card bg-white rounded-3xl p-8 card-shadow relative" id="exp-2" style="transform: rotate(0.3deg);">
-       <div class="experience-header mb-6" onclick="toggleExperience(event)"><span class="toggle-icon">▼</span>
-        <div class="flex-1">
-         <div class="flex flex-wrap items-center gap-4"><span class="bg-ink/10 text-ink px-4 py-1 rounded-full font-body text-sm font-medium">Oct 2025 – Present</span>
-          <div class="flex items-center gap-3"><img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771353235/INditronix_logo_hgxat5.jpg" alt="Inditronix AI Labs" loading="lazy" class="company-logo" onerror="console.error('Logo failed:', this.src); this.style.display='none';"> <a href="https://inditronixailabs.com/" target="_blank" rel="noopener noreferrer" class="font-display font-bold text-xl text-ink hover:text-coral transition-colors">Inditronix AI Labs</a>
-          </div><span class="font-body text-ink/50 text-sm">IIT Patna</span>
-         </div>
-        </div>
-       </div><span class="font-body text-ink/60 text-sm mb-6 block">Product Intern</span>
-       <div class="experience-details"><!-- Product Scope -->
-        <div class="mb-6 bg-sky/20 p-4 rounded-2xl"><span class="font-body text-sm font-semibold text-blue-600">Product Scope</span>
-         <p class="font-body text-sm text-ink/70 mt-2">AI-driven tele-health platform integrating hardware and software to enable portable remote consultation, requiring structured workflows and execution alignment.</p>
-        </div>
-        <div class="grid md:grid-cols-4 gap-6">
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-coral">Problem</span>
-          <p class="font-body text-sm text-ink/70 mt-2">The product vision was defined, but execution lacked structured workflows and a centralized requirements system. Misalignment between product and engineering teams across hierarchy levels slowed sprint planning, documentation, and feedback flow.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-green-600">Action</span>
-          <p class="font-body text-sm text-ink/70 mt-2">Defined product workflows, feature requirements, and user stories to create clearer execution structure. Built a centralized product execution system to manage tasks, requirements, and communication across teams. Worked closely with engineering during agile sprint cycles to refine feature scope, track progress, and maintain documentation. Used GenAI tools to accelerate documentation, requirement drafting, and internal communication clarity.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-blue-600">Outcome</span>
-          <p class="font-body text-sm text-ink/70 mt-2">Improved operational clarity across product and engineering teams. Enabled smoother sprint execution and more structured requirement tracking. Strengthened alignment between product decisions, development timelines, and feedback loops.</p>
-         </div>
-         <div class="bg-canvas p-5 rounded-2xl"><span class="font-body text-sm font-semibold text-lavender">Tools &amp; Methods</span>
-          <div class="flex flex-wrap gap-2 mt-2"><span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Notion</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Jira</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Sprint Planning</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Agile Methodology</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Claude</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Gemini</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">ChatGPT</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Miro</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Figma</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Docs</span> <span class="bg-white px-2 py-1 rounded text-xs font-body text-ink/60">Sheets</span>
+
+          <!-- Left content -->
+          <div class="lg:col-span-5 space-y-5">
+            <!-- Status badge -->
+            <div class="inline-flex items-center gap-2.5 bg-white rounded-full px-4 py-2 card-shadow float-animation">
+              <span class="w-2.5 h-2.5 bg-green-400 rounded-full pulse-soft flex-shrink-0"></span>
+              <span class="font-body text-xs text-ink/60 font-medium tracking-wide">Open to Opportunities</span>
+            </div>
+
+            <!-- Name -->
+            <h1 id="hero-name" class="font-display font-bold text-ink leading-tight hero-name" style="font-size: clamp(2.6rem, 5vw, 4.5rem);">Aditya<br>Kuranjekar</h1>
+
+            <!-- Title tags -->
+            <div id="hero-title" class="flex flex-wrap items-center gap-2">
+              <span class="bg-coral/15 text-coral px-4 py-1.5 rounded-full font-body text-xs font-semibold tracking-wide uppercase">Product Manager</span>
+              <span class="font-handwritten text-xl text-ink/40">×</span>
+              <span class="bg-lavender text-ink/70 px-4 py-1.5 rounded-full font-body text-xs font-medium">IIT Patna</span>
+              <span class="font-handwritten text-xl text-ink/40">×</span>
+              <span class="bg-mint text-ink/70 px-4 py-1.5 rounded-full font-body text-xs font-medium">IIM Bodh Gaya</span>
+            </div>
+
+            <!-- Tagline -->
+            <p id="hero-tagline" class="font-display text-ink/75 max-w-lg leading-relaxed hero-tagline" style="font-size: clamp(1.1rem, 2.2vw, 1.6rem);">Building <span class="sketch-underline">user-first products</span> using research, strategy, and execution.</p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap gap-3 pt-3">
+              <a href="#leadership" class="relative group">
+                <div class="bg-ink text-white px-7 py-3.5 rounded-2xl font-body font-medium text-sm cta-btn card-shadow">View My Work</div>
+                <svg class="absolute -right-14 top-1/2 -translate-y-1/2 w-12 h-12 text-coral hidden lg:block" viewBox="0 0 60 60">
+                  <path d="M5 40 Q20 20 50 25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="100" style="animation: draw-line 1s ease forwards;"/>
+                  <path d="M42 18 L50 25 L42 32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+              </a>
+              <a href="https://drive.google.com/file/d/1Yex0mAjw8YFIsd_3ktQTgMWA3T_joMN2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-sunshine text-ink px-7 py-3.5 rounded-2xl font-body font-medium text-sm cta-btn card-shadow">Resume</a>
+              <a href="#contact" class="bg-white text-ink px-7 py-3.5 rounded-2xl font-body font-medium text-sm cta-btn card-shadow border border-ink/10 hover:border-coral">Let's Talk</a>
+            </div>
           </div>
-         </div>
+
+          <!-- Right decorative sticky notes -->
+          <div class="lg:col-span-5 relative h-80 hidden lg:block">
+            <div class="absolute top-0 right-4 bg-sunshine p-4 w-44 sticky-note float-animation rounded-md">
+              <p class="font-handwritten text-lg text-ink/80">"Ship → Learn → Iterate"</p>
+            </div>
+            <div class="absolute top-24 left-0 bg-peach p-4 w-48 sticky-note float-animation-delayed rounded-md">
+              <p class="font-handwritten text-lg text-ink/80">Product at intersection of tech + business</p>
+            </div>
+            <div class="absolute bottom-20 right-12 bg-mint p-4 w-44 sticky-note float-animation rounded-md">
+              <p class="font-handwritten text-lg text-ink/80">User research = Product direction</p>
+            </div>
+            <div class="absolute bottom-0 left-8 bg-lavender p-4 w-44 sticky-note float-animation-delayed rounded-md">
+              <p class="font-handwritten text-lg text-ink/80">From idea to execution</p>
+            </div>
+            <svg class="absolute inset-0 w-full h-full pointer-events-none" style="overflow:visible;">
+              <path d="M100 50 Q150 100 80 150" stroke="#FF8B7B" stroke-width="1.5" stroke-dasharray="5,5" fill="none" opacity="0.4"/>
+              <path d="M200 200 Q180 250 220 300" stroke="#D8F3DC" stroke-width="1.5" stroke-dasharray="5,5" fill="none" opacity="0.4"/>
+            </svg>
+          </div>
+
         </div>
-       </div>
+
+        <!-- Quick stats bar -->
+        <div class="mt-16 pt-10 border-t border-ink/8">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl">
+            <div class="text-center sm:text-left">
+              <div class="metric-number text-coral">2</div>
+              <div class="font-body text-xs text-ink/50 mt-1 font-medium tracking-wide uppercase">PM Internships</div>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="metric-number text-ink">5+</div>
+              <div class="font-body text-xs text-ink/50 mt-1 font-medium tracking-wide uppercase">Cross-func. team led</div>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="metric-number text-ink">3500+</div>
+              <div class="font-body text-xs text-ink/50 mt-1 font-medium tracking-wide uppercase">Users impacted</div>
+            </div>
+            <div class="text-center sm:text-left">
+              <div class="metric-number text-ink">Agile</div>
+              <div class="font-body text-xs text-ink/50 mt-1 font-medium tracking-wide uppercase">Scrum · Sprints · PRDs</div>
+            </div>
+          </div>
+        </div>
       </div>
-     </div>
-    </div>
-    </section><!-- Projects Section -->
-   <section id="projects" class="py-20 px-6 relative">
-    <div class="max-w-6xl mx-auto">
-     <div class="flex items-center gap-4 mb-12">
-      <h2 class="font-display text-4xl font-bold text-ink">Projects</h2>
-      <div class="flex-1 h-px bg-ink/10"></div><span class="font-handwritten text-2xl text-coral -rotate-6">built &amp; shipped</span>
-     </div>
-     <p class="font-body text-ink/60 mb-12 max-w-2xl">Full-stack products where I combined product thinking, design, and execution to solve real problems.</p><!-- Project Cards -->
-     <div class="grid md:grid-cols-2 gap-8"><!-- Project 1: AirHub -->
-      <div class="bg-white rounded-3xl p-8 card-shadow relative overflow-hidden" style="transform: rotate(-0.5deg);">
-       <div class="absolute top-0 right-0 w-32 h-32 bg-sunshine/10 rounded-full -translate-y-1/2 translate-x-1/2"></div><!-- Project Image -->
-       <div class="mb-6"><a href="https://github.com/AdityaKuranjekar/AdityaKuranjekar.github.io/tree/main" target="_blank" rel="noopener noreferrer" class="inline-block hover:scale-105 transition-transform"> <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/AirHub.jpeg" alt="AirHub – Travel Stay Booking Platform" loading="lazy" class="w-24 h-24 rounded-2xl card-shadow object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#e5e7eb'; this.style.borderRadius='16px';"> </a>
-       </div><!-- Project Title --> <a href="https://github.com/AdityaKuranjekar/AdityaKuranjekar.github.io/tree/main" target="_blank" rel="noopener noreferrer" class="inline-block mb-4"> <h3 class="font-display font-bold text-2xl text-ink hover:text-coral transition-colors">AirHub</h3><p class="font-body text-sm text-ink/60">Travel Stay Booking Platform</p></a> <!-- Description -->
-       <div class="space-y-2 mb-6">
-        <p class="font-body text-sm text-ink/70">• Built a full-stack travel stay platform with real-time booking experience</p>
-        <p class="font-body text-sm text-ink/70">• Integrated chatbot recommendations and scalable backend workflows</p>
-        <p class="font-body text-sm text-ink/70">• Focused on usability, secure authentication, and product flow design</p>
-       </div><!-- Tech Stack Tag -->
-       <div class="inline-flex items-center gap-2 bg-peach/20 px-3 py-1 rounded-full"><span class="font-body text-xs text-coral font-medium">Full-Stack</span>
-       </div>
-      </div><!-- Project 2: Campus Errands -->
-      <div class="bg-white rounded-3xl p-8 card-shadow relative overflow-hidden" style="transform: rotate(0.5deg);">
-       <div class="absolute top-0 right-0 w-32 h-32 bg-mint/10 rounded-full -translate-y-1/2 translate-x-1/2"></div><!-- Project Image -->
-       <div class="mb-6"><img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/Campus%20Errands.png" alt="Campus Errands – Hyperlocal Task Marketplace" loading="lazy" class="w-24 h-24 rounded-2xl card-shadow object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#e5e7eb'; this.style.borderRadius='16px';">
-       </div><!-- Project Title -->
-       <h3 class="font-display font-bold text-2xl text-ink mb-1">Campus Errands</h3>
-       <p class="font-body text-sm text-ink/60 mb-4">Hyperlocal Task Marketplace</p><!-- Description -->
-       <div class="space-y-2 mb-6">
-        <p class="font-body text-sm text-ink/70">• Ongoing product-focused platform solving campus task coordination</p>
-        <p class="font-body text-sm text-ink/70">• Strong PM-driven approach with workflows, trust logic, and marketplace design</p>
-        <p class="font-body text-sm text-ink/70">• Built using similar full-stack tech with focus on product execution</p>
-       </div><!-- Tech Stack Tag -->
-       <div class="inline-flex items-center gap-2 bg-mint/20 px-3 py-1 rounded-full"><span class="font-body text-xs text-green-700 font-medium">Marketplace</span>
-       </div>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-5 sm:px-8 relative">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-4 mb-10">
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">About Me</h2>
+          <div class="flex-1 h-px bg-ink/10"></div>
+          <span class="font-handwritten text-2xl text-coral -rotate-6">who dis?</span>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Main bio card -->
+          <div class="md:col-span-2 bg-white p-7 sm:p-9 rounded-3xl card-shadow card-hover" style="transform: rotate(-0.4deg);">
+            <p id="about-intro" class="font-body text-base sm:text-lg text-ink/80 leading-relaxed mb-5">
+              I'm a <span class="bg-coral/15 px-2 py-0.5 rounded font-medium text-coral">product-first thinker</span> working at the <span class="bg-coral/15 px-2 py-0.5 rounded font-medium">intersection of technology, strategy, and execution</span>. With a dual foundation in Computer Science (IIT Patna) and Digital Business Management (IIM Bodh Gaya), I combine engineering rigor with business strategy.
+            </p>
+            <p class="font-body text-sm sm:text-base text-ink/65 leading-relaxed">
+              I've led product internships where I moved beyond task execution into real PM thinking—conducting user research, translating insights into roadmaps, defining workflows, and coordinating cross-functional teams with clarity and ownership. I obsess over understanding the "why" before building the "what," and I'm driven by building products that create genuine value. Whether it's aligning engineers and designers, scaling events to 2500+ users, or designing centralized execution systems, I treat every challenge as a product problem to be solved strategically.
+            </p>
+          </div>
+
+          <!-- Strength cards -->
+          <div class="space-y-3.5">
+            <div class="bg-peach p-5 rounded-2xl sticky-note">
+              <h3 class="font-display font-semibold text-ink text-sm mb-1.5"> Research-Driven</h3>
+              <p class="font-body text-xs sm:text-sm text-ink/65">Research → Personas → Strategy</p>
+            </div>
+            <div class="bg-mint p-5 rounded-2xl sticky-note">
+              <h3 class="font-display font-semibold text-ink text-sm mb-1.5"> Execution</h3>
+              <p class="font-body text-xs sm:text-sm text-ink/65">From PRD to ship</p>
+            </div>
+            <div class="bg-lavender p-5 rounded-2xl sticky-note">
+              <h3 class="font-display font-semibold text-ink text-sm mb-1.5"> Leadership</h3>
+              <p class="font-body text-xs sm:text-sm text-ink/65">Cross-functional alignment</p>
+            </div>
+          </div>
+        </div>
       </div>
-     </div>
-    </div>
-   </section><!-- Leadership & Projects Section -->
-   <section id="leadership" class="py-20 px-6 relative">
-    <div class="max-w-6xl mx-auto">
-     <div class="text-center mb-12"><span class="font-handwritten text-2xl text-coral">leadership</span>
-      <h2 class="font-display text-4xl font-bold text-ink mt-2">Impact &amp; Ownership</h2>
-      <p class="font-body text-ink/60 mt-4 max-w-xl mx-auto">Treating initiatives like product launches. Stakeholder alignment, execution clarity, measurable outcomes.</p>
-     </div><!-- Impact Cards -->
-     <div class="grid md:grid-cols-2 gap-12"><!-- Leadership 1 -->
-      <div class="relative">
-       <div class="bg-white rounded-3xl p-8 card-shadow relative"><!-- Badge - Top Right Corner --> <a href="https://www.instagram.com/ecell_iitpatna/" target="_blank" rel="noopener noreferrer" class="absolute -top-6 -right-6 z-20 block hover:scale-110 transition-transform duration-300"> <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/E-Cell.jpeg" alt="E-Cell IIT Patna" loading="lazy" class="w-32 h-32 rounded-2xl card-shadow object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#e5e7eb'; this.style.borderRadius='16px';"> </a> <!-- Impact bubble -->
-        <div class="bg-coral/20 px-4 py-2 rounded-full inline-flex items-center gap-2 mb-6" style="transform: rotate(-2deg);"><span class="font-body text-sm text-coral font-medium">Impact</span>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 px-5 sm:px-8 bg-cream relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-72 h-72 bg-coral/8 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-6xl mx-auto relative">
+        <div class="flex flex-wrap items-end gap-3 mb-4">
+          <span class="font-handwritten text-xl text-ink/45 -rotate-6">my journey</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">Product Stories</h2>
         </div>
-        <p class="font-body text-ink/70 mb-6">Building entrepreneurship culture at IIT Patna. Managing events for 2500+ students. Turning ideas into structured initiatives.</p><!-- Role -->
-        <div class="bg-sky/30 p-4 rounded-2xl mb-6 inline-block" style="transform: rotate(1deg);"><span class="font-body text-sm text-ink">E-Cell IIT Patna – Manager Events</span>
-        </div><!-- What I Did -->
-        <div class="bg-mint p-5 rounded-2xl mb-6"><span class="font-body text-sm font-semibold text-green-700 mb-2 block">What I Did</span>
-         <p class="font-body text-sm text-ink/70">Led entrepreneurship initiatives. Managed stakeholders. Executed timelines and coordinated cross-functional teams. Treated every event as a product launch with clear outcomes.</p>
-        </div><!-- Key Metrics -->
-        <div class="flex items-center gap-3">
-         <div class="bg-sunshine p-4 rounded-xl text-center" style="transform: rotate(-1deg);"><span class="font-display text-3xl font-bold text-ink">2500+</span> <span class="font-body text-xs text-ink/60 block">Students Reached</span>
-         </div>
-         <div class="bg-lavender p-4 rounded-xl text-center" style="transform: rotate(2deg);"><span class="font-display text-3xl font-bold text-ink">10+</span> <span class="font-body text-xs text-ink/60 block">Events Managed</span>
-         </div>
+        <p class="font-body text-sm sm:text-base text-ink/55 mb-12 max-w-2xl leading-relaxed">
+          Product internships where I translated research into decisions, coordinated cross-functional execution, and brought clarity to chaos.
+        </p>
+
+        <div class="space-y-7">
+
+          <!-- Journey 1: Skillify Me -->
+          <div class="experience-card bg-white rounded-3xl p-6 sm:p-8 card-shadow relative overflow-hidden" id="exp-1">
+            <div class="absolute top-0 right-0 w-28 h-28 bg-coral/8 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+            <div class="experience-header mb-5" onclick="toggleExperience(event)">
+              <span class="toggle-icon">▼</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="bg-coral/15 text-coral px-3 py-1 rounded-full font-body text-xs font-semibold">Oct – Dec 2025</span>
+                  <div class="flex items-center gap-2.5">
+                    <img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771353171/Skillify_Logo_dtjkvm.jpg" alt="SkillifyMe" loading="lazy" class="company-logo" onerror="this.style.display='none';">
+                    <a href="https://www.skillifyme.co.in/" target="_blank" rel="noopener noreferrer" class="font-display font-bold text-lg sm:text-xl text-ink hover:text-coral transition-colors duration-200">SkillifyMe</a>
+                  </div>
+                  <span class="font-body text-ink/40 text-xs">Remote</span>
+                </div>
+              </div>
+            </div>
+            <span class="inline-block font-body text-xs text-ink/50 font-medium mb-5 bg-ink/5 px-3 py-1 rounded-full">Product Intern</span>
+            <div class="experience-details">
+              <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-coral tracking-wider uppercase">Problem</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">The team lacked clear user segmentation and a structured product direction. Cross-functional misalignment across design, tech, and growth slowed feature prioritization and GTM execution.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-green-600 tracking-wider uppercase">Action</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">Coordinated a 10+ member cross-functional team and conducted user research through surveys and discussions. Built user personas, mapped journeys, and translated insights into prioritized features and roadmap inputs.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-blue-600 tracking-wider uppercase">Outcome</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">Improved alignment across teams on target users and product direction. Helped establish research-backed feature priorities and streamlined GTM preparation, enabling more focused execution.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-ink/60 tracking-wider uppercase">Stack</span>
+                  <div class="flex flex-wrap gap-1.5 mt-2.5">
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Surveys</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Personas</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">User Research</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">GTM</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Notion</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Miro</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Figma</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Jira</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Journey 2: Inditronix AI Labs -->
+          <div class="experience-card bg-white rounded-3xl p-6 sm:p-8 card-shadow relative" id="exp-2" style="transform: rotate(0.25deg);">
+            <div class="experience-header mb-5" onclick="toggleExperience(event)">
+              <span class="toggle-icon">▼</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="bg-ink/8 text-ink/70 px-3 py-1 rounded-full font-body text-xs font-semibold">Oct 2025 – Present</span>
+                  <div class="flex items-center gap-2.5">
+                    <img src="https://res.cloudinary.com/djs8jpcpm/image/upload/v1771353235/INditronix_logo_hgxat5.jpg" alt="Inditronix AI Labs" loading="lazy" class="company-logo" onerror="this.style.display='none';">
+                    <a href="https://inditronixailabs.com/" target="_blank" rel="noopener noreferrer" class="font-display font-bold text-lg sm:text-xl text-ink hover:text-coral transition-colors duration-200">Inditronix AI Labs</a>
+                  </div>
+                  <span class="font-body text-ink/40 text-xs">IIT Patna</span>
+                </div>
+              </div>
+            </div>
+            <span class="inline-block font-body text-xs text-ink/50 font-medium mb-5 bg-ink/5 px-3 py-1 rounded-full">Product Intern</span>
+            <div class="experience-details">
+              <div class="mb-5 bg-sky/20 p-4 rounded-xl border border-sky/30">
+                <span class="font-body text-xs font-bold text-blue-600 tracking-wider uppercase">Product Scope</span>
+                <p class="font-body text-sm text-ink/65 mt-2 leading-relaxed">AI-driven tele-health platform integrating hardware and software to enable portable remote consultation, requiring structured workflows and execution alignment.</p>
+              </div>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-coral tracking-wider uppercase">Problem</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">Execution lacked structured workflows and a centralized requirements system. Misalignment between product and engineering slowed sprint planning and feedback flow.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-green-600 tracking-wider uppercase">Action</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">Defined product workflows, feature requirements, and user stories. Built a centralized product execution system. Worked closely with engineering in agile sprint cycles using GenAI for documentation acceleration.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-blue-600 tracking-wider uppercase">Outcome</span>
+                  <p class="font-body text-sm text-ink/65 mt-2.5 leading-relaxed">Improved operational clarity across product and engineering. Enabled smoother sprint execution and more structured requirement tracking. Strengthened alignment between product decisions and dev timelines.</p>
+                </div>
+                <div class="bg-canvas p-4 sm:p-5 rounded-2xl border border-ink/5">
+                  <span class="font-body text-xs font-bold text-ink/60 tracking-wider uppercase">Stack</span>
+                  <div class="flex flex-wrap gap-1.5 mt-2.5">
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Notion</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Jira</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Agile</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Claude</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Gemini</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">ChatGPT</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Miro</span>
+                    <span class="bg-white px-2 py-1 rounded-md text-xs font-body text-ink/55 border border-ink/8">Figma</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-       </div><!-- Floating label -->
-       <div class="absolute -bottom-3 -left-3 bg-ink text-white px-4 py-2 rounded-full font-body text-sm font-medium" style="transform: rotate(-5deg);">
-        Leadership
-       </div>
-      </div><!-- Leadership 2: Mindset Mela -->
-      <div class="relative">
-       <div class="bg-white rounded-3xl p-8 card-shadow relative"><!-- Badge - Top Right Corner --> <a href="https://www.instagram.com/reel/DMM0HTxKxfC/?utm_source=ig_web_copy_link" target="_blank" rel="noopener noreferrer" class="absolute -top-6 -right-6 z-20 block hover:scale-110 transition-transform duration-300"> <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/MindsetMela.jpeg" alt="Mindset Mela 2025" loading="lazy" class="w-32 h-32 rounded-2xl card-shadow object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#e5e7eb'; this.style.borderRadius='16px';"> </a>
-        <div class="bg-coral/20 px-4 py-2 rounded-full inline-flex items-center gap-2 mb-6" style="transform: rotate(1deg);"><span class="font-body text-sm text-coral font-medium">Initiative</span>
-        </div>
-        <p class="font-body text-ink/70 mb-6">Architected and executed a large-scale youth event from vision to reality. Managed VIPs, logistics, and a 5+ hour program for 1000+ attendees.</p>
-        <div class="bg-peach/30 p-4 rounded-2xl mb-6 inline-block" style="transform: rotate(-1deg);"><span class="font-body text-sm text-ink">Mindset Mela 2025 – Lead Organizer</span>
-        </div>
-        <div class="bg-mint p-5 rounded-2xl mb-6"><span class="font-body text-sm font-semibold text-green-700 mb-2 block">What I Did</span>
-         <p class="font-body text-sm text-ink/70">Built event vision and structured agenda. Designed 5-hour user journey. Managed VIP stakeholders and coordinated all logistics. Applied product thinking to event execution.</p>
-        </div>
-        <div class="flex items-center gap-3">
-         <div class="bg-sunshine p-4 rounded-xl text-center" style="transform: rotate(2deg);"><span class="font-display text-3xl font-bold text-ink">1000+</span> <span class="font-body text-xs text-ink/60 block">Attendees</span>
-         </div>
-         <div class="bg-lavender p-4 rounded-xl text-center" style="transform: rotate(-2deg);"><span class="font-display text-3xl font-bold text-ink">5+</span> <span class="font-body text-xs text-ink/60 block">Hour Program</span>
-         </div>
-        </div>
-       </div>
-       <div class="absolute -bottom-3 -right-3 bg-coral text-white px-4 py-2 rounded-full font-body text-sm font-medium" style="transform: rotate(5deg);">
-        Event Lead
-       </div>
       </div>
-     </div>
-    </div>
-   </section><!-- Skills Section -->
-   <section id="skills" class="py-20 px-6 bg-cream relative overflow-hidden">
-    <div class="absolute bottom-0 left-0 w-48 h-48 bg-mint/20 rounded-full blur-3xl"></div>
-    <div class="max-w-6xl mx-auto">
-     <div class="flex flex-wrap items-center gap-4 mb-12">
-      <h2 class="font-display text-4xl font-bold text-ink">Skills &amp; Toolkit</h2><span class="font-handwriting text-xl text-ink/50">( the weapons in my arsenal )</span>
-     </div><!-- Skill bubbles -->
-     <div class="grid md:grid-cols-3 gap-8"><!-- Product & Strategy -->
-      <div class="bg-white rounded-3xl p-6 card-shadow">
-       <div class="flex items-center gap-3 mb-6">
-        <h3 class="font-display font-semibold text-xl text-ink">Product &amp; Strategy</h3>
-       </div>
-       <div class="flex flex-wrap gap-2"><span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">Product Vision</span> <span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">PRDs</span> <span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">User Stories</span> <span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">Roadmaps</span> <span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">GTM Strategy</span> <span class="bg-coral/20 text-coral px-4 py-2 rounded-full text-sm font-body">Prioritization</span>
-       </div>
-      </div><!-- UX & Research -->
-      <div class="bg-white rounded-3xl p-6 card-shadow">
-       <div class="flex items-center gap-3 mb-6">
-        <h3 class="font-display font-semibold text-xl text-ink">UX &amp; Research</h3>
-       </div>
-       <div class="flex flex-wrap gap-2"><span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">User Research</span> <span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">Personas</span> <span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">Wireframing</span> <span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">Workflows</span> <span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">Competitive Analysis</span> <span class="bg-mint text-ink px-4 py-2 rounded-full text-sm font-body">User Testing</span>
-       </div>
-      </div><!-- Tools & Tech -->
-      <div class="bg-white rounded-3xl p-6 card-shadow">
-       <div class="flex items-center gap-3 mb-6">
-        <h3 class="font-display font-semibold text-xl text-ink">Tools &amp; Tech</h3>
-       </div>
-       <div class="flex flex-wrap gap-2"><span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Figma</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Notion</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Jira</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Miro</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Excel/Power BI</span> <span class="bg-lavender text-ink px-4 py-2 rounded-full text-sm font-body">Python / Java / C</span>
-       </div>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 px-5 sm:px-8 relative">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-wrap items-end gap-3 mb-4">
+          <span class="font-handwritten text-xl text-ink/45 -rotate-6">shipping ideas</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">Personal Projects</h2>
+        </div>
+        <p class="font-body text-sm sm:text-base text-ink/55 mb-12 max-w-2xl leading-relaxed">
+          Turning concepts into functional products. From ideation to shipped MVPs—user-first thinking at every step.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-8">
+
+          <!-- Project 1: AirHub -->
+          <div class="project-card bg-white rounded-3xl overflow-hidden card-shadow" style="transform: rotate(-0.8deg);">
+            <div class="relative h-56 overflow-hidden bg-gradient-to-br from-sky/20 to-peach/20">
+              <a href="https://github.com/AdityaKuranjekar/AdityaKuranjekar.github.io/tree/main" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
+                <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/AirHub.jpeg"
+                     alt="AirHub" loading="lazy"
+                     class="project-img w-full h-full object-cover"
+                     onerror="this.style.background='#e5e7eb';">
+              </a>
+              <div class="absolute top-3.5 right-3.5 bg-sunshine text-ink px-3 py-1 rounded-full font-body text-xs font-bold rotate-6 shadow-[3px_3px_0px_rgba(0,0,0,0.1)] transition-all duration-200 ease-out hover:rotate-0 hover:scale-105 cursor-default z-10">Live</div>
+            </div>
+            <div class="p-6">
+              <a href="https://github.com/AdityaKuranjekar/AdityaKuranjekar.github.io/tree/main" target="_blank" rel="noopener noreferrer" class="inline-block">
+                <h3 class="font-display text-xl sm:text-2xl font-bold text-ink hover:text-coral transition-colors duration-200 mb-2">AirHub</h3>
+              </a>
+              <p class="font-body text-sm text-ink/60 mb-4 leading-relaxed">Real-time flight booking platform with smart search, dynamic pricing, and seamless UX. Built with focus on traveler pain points and conversion optimization.</p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-coral/15 text-coral px-3 py-1 rounded-full text-xs font-body font-medium">Flight Booking</span>
+                <span class="bg-coral/15 text-coral px-3 py-1 rounded-full text-xs font-body font-medium">Product Design</span>
+                <span class="bg-coral/15 text-coral px-3 py-1 rounded-full text-xs font-body font-medium">UX Research</span>
+              </div>
+              <a href="https://github.com/AdityaKuranjekar/AdityaKuranjekar.github.io/tree/main" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-coral font-body text-sm font-medium hover:gap-3 transition-all duration-200">
+                <span>View on GitHub</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 2: Campus Errands -->
+          <div class="project-card bg-white rounded-3xl overflow-hidden card-shadow" style="transform: rotate(0.8deg);">
+            <div class="relative h-56 overflow-hidden bg-gradient-to-br from-mint/20 to-lavender/20">
+              <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/Campus%20Errands.png"
+                   alt="Campus Errands" loading="lazy"
+                   class="project-img w-full h-full object-cover"
+                   onerror="this.style.background='#e5e7eb';">
+              <div class="absolute top-3.5 right-3.5 bg-sunshine text-ink px-3 py-1 rounded-full font-body text-xs font-bold rotate-6 shadow-[3px_3px_0px_rgba(0,0,0,0.1)] transition-all duration-200 ease-out hover:rotate-0 hover:scale-105 cursor-default z-10">In Progress</div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-display text-xl sm:text-2xl font-bold text-ink mb-2">Campus Errands</h3>
+              <p class="font-body text-sm text-ink/60 mb-4 leading-relaxed">Hyperlocal task marketplace connecting students for quick errands and services. Designed two-sided marketplace mechanics with gamification and trust-building features.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-mint text-ink/70 px-3 py-1 rounded-full text-xs font-body font-medium">Marketplace</span>
+                <span class="bg-mint text-ink/70 px-3 py-1 rounded-full text-xs font-body font-medium">Two-Sided Network</span>
+                <span class="bg-mint text-ink/70 px-3 py-1 rounded-full text-xs font-body font-medium">Campus Growth</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-     </div><!-- Certifications & Achievements -->
-     <div class="grid md:grid-cols-2 gap-8 mt-12"><!-- Certifications -->
-      <div>
-       <h3 class="font-display font-semibold text-xl text-ink mb-6">Certifications</h3>
-       <div class="flex flex-wrap gap-4">
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #10B981;"><span class="font-body text-sm font-medium text-ink">Microsoft AI Product Manager</span> <span class="font-body text-xs text-ink/50 block mt-1">2025</span>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- Leadership Section -->
+    <section id="leadership" class="py-20 px-5 sm:px-8 relative">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <span class="font-handwritten text-xl text-coral">leadership</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink mt-1">Impact &amp; Ownership</h2>
+          <p class="font-body text-sm sm:text-base text-ink/55 mt-3 max-w-lg mx-auto leading-relaxed">Treating initiatives like product launches. Stakeholder alignment, execution clarity, measurable outcomes.</p>
         </div>
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #3B82F6;"><span class="font-body text-sm font-medium text-ink">GenAI in Business</span> <span class="font-body text-xs text-ink/50 block mt-1">University of Michigan</span>
+
+        <div class="grid md:grid-cols-2 gap-12">
+
+          <!-- Leadership 1: E-Cell -->
+          <div class="relative mt-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow card-hover relative">
+              <a href="https://www.instagram.com/ecell_iitpatna/" target="_blank" rel="noopener noreferrer" class="absolute -top-6 -right-4 sm:-right-6 z-20 block hover:scale-105 transition-transform duration-200">
+                <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/E-Cell.jpeg" alt="E-Cell IIT Patna" loading="lazy" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl card-shadow object-cover" onerror="this.style.background='#e5e7eb'; this.style.borderRadius='16px';">
+              </a>
+
+              <div class="bg-coral/15 px-3 py-1.5 rounded-full inline-flex items-center gap-2 mb-5" style="transform: rotate(-2deg);">
+                <span class="font-body text-xs text-coral font-semibold tracking-wide uppercase">Impact</span>
+              </div>
+
+              <p class="font-body text-sm sm:text-base text-ink/65 mb-5 leading-relaxed">Building entrepreneurship culture at IIT Patna. Managing events for 2500+ students. Turning ideas into structured initiatives.</p>
+
+              <div class="bg-sky/25 px-4 py-2.5 rounded-xl mb-5 inline-block border border-sky/30" style="transform: rotate(0.8deg);">
+                <span class="font-body text-xs sm:text-sm text-ink/70 font-medium">E-Cell IIT Patna – Manager Events</span>
+              </div>
+
+              <div class="bg-mint p-4 rounded-2xl mb-6">
+                <span class="font-body text-xs font-bold text-green-700 mb-2 block tracking-wider uppercase">What I Did</span>
+                <p class="font-body text-sm text-ink/65 leading-relaxed">Led entrepreneurship initiatives. Managed stakeholders. Executed timelines and coordinated cross-functional teams. Treated every event as a product launch with clear outcomes.</p>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="bg-sunshine px-5 py-4 rounded-2xl text-center" style="transform: rotate(-1.5deg);">
+                  <span class="metric-number text-ink block">2500+</span>
+                  <span class="font-body text-xs text-ink/55 mt-1 block font-medium">Students Reached</span>
+                </div>
+                <div class="bg-lavender px-5 py-4 rounded-2xl text-center" style="transform: rotate(2deg);">
+                  <span class="metric-number text-ink block">10+</span>
+                  <span class="font-body text-xs text-ink/55 mt-1 block font-medium">Events Managed</span>
+                </div>
+              </div>
+            </div>
+            <div class="absolute -bottom-3 -left-2 bg-ink text-white px-4 py-1.5 rounded-full font-body text-xs font-semibold" style="transform: rotate(-4deg);">Leadership</div>
+          </div>
+
+          <!-- Leadership 2: Mindset Mela -->
+          <div class="relative mt-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow card-hover relative">
+              <a href="https://www.instagram.com/reel/DMM0HTxKxfC/?utm_source=ig_web_copy_link" target="_blank" rel="noopener noreferrer" class="absolute -top-6 -right-4 sm:-right-6 z-20 block hover:scale-105 transition-transform duration-200">
+                <img src="https://raw.githubusercontent.com/AdityaKuranjekar/AdityaKuranjekar.github.io/main/assets/MindsetMela.jpeg" alt="Mindset Mela 2025" loading="lazy" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl card-shadow object-cover" onerror="this.style.background='#e5e7eb'; this.style.borderRadius='16px';">
+              </a>
+
+              <div class="bg-coral/15 px-3 py-1.5 rounded-full inline-flex items-center gap-2 mb-5" style="transform: rotate(1deg);">
+                <span class="font-body text-xs text-coral font-semibold tracking-wide uppercase">Initiative</span>
+              </div>
+
+              <p class="font-body text-sm sm:text-base text-ink/65 mb-5 leading-relaxed">Architected and executed a large-scale youth event from vision to reality. Managed VIPs, logistics, and a 5+ hour program for 1000+ attendees.</p>
+
+              <div class="bg-peach/35 px-4 py-2.5 rounded-xl mb-5 inline-block border border-peach/50" style="transform: rotate(-0.8deg);">
+                <span class="font-body text-xs sm:text-sm text-ink/70 font-medium">Mindset Mela 2025 – Lead Organizer</span>
+              </div>
+
+              <div class="bg-mint p-4 rounded-2xl mb-6">
+                <span class="font-body text-xs font-bold text-green-700 mb-2 block tracking-wider uppercase">What I Did</span>
+                <p class="font-body text-sm text-ink/65 leading-relaxed">Built event vision and structured agenda. Designed 5-hour user journey. Managed VIP stakeholders and coordinated all logistics. Applied product thinking to event execution.</p>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="bg-sunshine px-5 py-4 rounded-2xl text-center" style="transform: rotate(1.5deg);">
+                  <span class="metric-number text-ink block">1000+</span>
+                  <span class="font-body text-xs text-ink/55 mt-1 block font-medium">Attendees</span>
+                </div>
+                <div class="bg-lavender px-5 py-4 rounded-2xl text-center" style="transform: rotate(-2deg);">
+                  <span class="metric-number text-ink block">5+</span>
+                  <span class="font-body text-xs text-ink/55 mt-1 block font-medium">Hour Program</span>
+                </div>
+              </div>
+            </div>
+            <div class="absolute -bottom-3 -right-2 bg-coral text-white px-4 py-1.5 rounded-full font-body text-xs font-semibold" style="transform: rotate(4deg);">Event Lead</div>
+          </div>
+
         </div>
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #8B5CF6;"><span class="font-body text-sm font-medium text-ink">Entrepreneurship Program</span> <span class="font-body text-xs text-ink/50 block mt-1">MyCaptain 2024</span>
-        </div>
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #EC4899;"><span class="font-body text-sm font-medium text-ink">Deloitte Australia – Technology Job Simulation</span> <span class="font-body text-xs text-ink/50 block mt-1">Forage • Dec 2025</span>
-        </div>
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #F59E0B;"><span class="font-body text-sm font-medium text-ink">DaVinci Resolve</span> <span class="font-body text-xs text-ink/50 block mt-1">Skillshare • Dec 2025</span>
-        </div>
-        <div class="stamp-card bg-white p-4 text-center" style="border-color: #06B6D4;"><span class="font-body text-sm font-medium text-ink">DSA with Java – Certificate of Completion</span> <span class="font-body text-xs text-ink/50 block mt-1">Apna College • Apr 2025</span>
-        </div>
-       </div>
-      </div><!-- Education -->
-      <div>
-       <h3 class="font-display font-semibold text-xl text-ink mb-6">Education</h3>
-       <div class="space-y-3">
-        <div class="bg-white p-5 rounded-2xl card-shadow"><span class="font-body font-medium text-ink">B.Tech Computer Science &amp; Engineering</span> <span class="font-body text-sm text-ink/60 block mt-1">Indian Institute of Technology (IIT) Patna</span> <span class="font-body text-sm text-ink/60">2024–2028 | Currently 4th Semester | CPI: 8.10</span>
-        </div>
-        <div class="bg-mint/30 p-5 rounded-2xl"><span class="font-body font-medium text-ink">MBA Digital Business Management</span> <span class="font-body text-sm text-ink/60 block">Indian Institute of Management (IIM) Bodh Gaya</span> <span class="font-body text-sm text-ink/60">2027–2029</span>
-        </div>
-        <div class="bg-peach/30 p-5 rounded-2xl"><span class="font-body font-medium text-ink">Class XII – Sunny's Spring Dale School, Bhandara</span> <span class="font-body text-sm text-ink/60 block">CBSE</span> <span class="font-body text-sm text-ink/60">2022–2024 | 91.6%</span>
-        </div>
-        <div class="bg-lavender/30 p-5 rounded-2xl"><span class="font-body font-medium text-ink">Class X – Sunflag School, Bhandara</span> <span class="font-body text-sm text-ink/60 block">CBSE</span> <span class="font-body text-sm text-ink/60">2020–2022 | 98.6%</span>
-        </div>
-       </div>
       </div>
-     </div><!-- Achievements -->
-     <div class="mt-12">
-      <h3 class="font-display font-semibold text-xl text-ink mb-6">Achievements &amp; Highlights</h3>
-      <div class="grid md:grid-cols-3 gap-4">
-       <div class="bg-sunshine/30 p-4 rounded-2xl flex items-center gap-3"><span class="font-body text-sm text-ink">Runner Up – Pitch It Up 2026, IIT Patna</span>
-       </div>
-       <div class="bg-peach/30 p-4 rounded-2xl flex items-center gap-3"><span class="font-body text-sm text-ink">Lead Organizer – Mindset Mela 2025</span>
-       </div>
-       <div class="bg-lavender/30 p-4 rounded-2xl flex items-center gap-3"><span class="font-body text-sm text-ink">Structured problem solver</span>
-       </div>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 px-5 sm:px-8 bg-cream relative overflow-hidden">
+      <div class="absolute bottom-0 left-0 w-56 h-56 bg-mint/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-6xl mx-auto relative">
+        <div class="flex flex-wrap items-end gap-3 mb-4">
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">Skills &amp; Toolkit</h2>
+          <span class="font-handwritten text-lg text-ink/45">( the weapons in my arsenal )</span>
+        </div>
+        <div class="h-px bg-ink/8 mb-10 max-w-2xl"></div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Product & Strategy -->
+          <div class="bg-white rounded-3xl p-6 card-shadow card-hover">
+            <div class="flex items-center gap-2 mb-5">
+              <span class="text-xl">🎯</span>
+              <h3 class="font-display font-semibold text-lg text-ink">Product &amp; Strategy</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">Product Vision</span>
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">PRDs</span>
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">User Stories</span>
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">Roadmaps</span>
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">GTM Strategy</span>
+              <span class="bg-coral/12 text-coral px-3.5 py-1.5 rounded-full text-xs font-body font-semibold">Prioritization</span>
+            </div>
+          </div>
+          <!-- UX & Research -->
+          <div class="bg-white rounded-3xl p-6 card-shadow card-hover">
+            <div class="flex items-center gap-2 mb-5">
+              <span class="text-xl">🔬</span>
+              <h3 class="font-display font-semibold text-lg text-ink">UX &amp; Research</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">User Research</span>
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Personas</span>
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Wireframing</span>
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Workflows</span>
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Competitive Analysis</span>
+              <span class="bg-mint text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">User Testing</span>
+            </div>
+          </div>
+          <!-- Tools & Tech -->
+          <div class="bg-white rounded-3xl p-6 card-shadow card-hover sm:col-span-2 lg:col-span-1">
+            <div class="flex items-center gap-2 mb-5">
+              <span class="text-xl">🛠</span>
+              <h3 class="font-display font-semibold text-lg text-ink">Tools &amp; Tech</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Figma</span>
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Notion</span>
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Jira</span>
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Miro</span>
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Excel / Power BI</span>
+              <span class="bg-lavender text-ink/70 px-3.5 py-1.5 rounded-full text-xs font-body font-medium">Python / Java / C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications & Education -->
+        <div class="grid md:grid-cols-2 gap-10 mt-14">
+
+          <!-- Certifications -->
+          <div>
+            <h3 class="font-display font-semibold text-xl text-ink mb-6">Certifications</h3>
+            <div class="flex flex-wrap gap-4">
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #10B981;">
+                <span class="font-body text-sm font-semibold text-ink">Microsoft AI Product Manager</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">2025</span>
+              </div>
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #3B82F6;">
+                <span class="font-body text-sm font-semibold text-ink">GenAI in Business</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">University of Michigan</span>
+              </div>
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #8B5CF6;">
+                <span class="font-body text-sm font-semibold text-ink">Entrepreneurship Program</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">MyCaptain 2024</span>
+              </div>
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #EC4899;">
+                <span class="font-body text-sm font-semibold text-ink">Deloitte Australia – Tech Job Simulation</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">Forage · Dec 2025</span>
+              </div>
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #F59E0B;">
+                <span class="font-body text-sm font-semibold text-ink">DaVinci Resolve</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">Skillshare · Dec 2025</span>
+              </div>
+              <div class="stamp-card bg-white p-4 text-center" style="border-color: #06B6D4;">
+                <span class="font-body text-sm font-semibold text-ink">DSA with Java</span>
+                <span class="font-body text-xs text-ink/45 block mt-1">Apna College · Apr 2025</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div>
+            <h3 class="font-display font-semibold text-xl text-ink mb-6">Education</h3>
+            <div class="space-y-3">
+              <div class="bg-white p-5 rounded-2xl card-shadow border-l-4 border-coral">
+                <span class="font-body font-semibold text-ink text-sm">B.Tech Computer Science &amp; Engineering</span>
+                <span class="font-body text-xs text-ink/60 block mt-1">Indian Institute of Technology (IIT) Patna</span>
+                <span class="font-body text-xs text-ink/50">2024–2028 · 4th Semester · CPI: 8.10</span>
+              </div>
+              <div class="bg-mint/25 p-5 rounded-2xl border-l-4 border-green-400">
+                <span class="font-body font-semibold text-ink text-sm">MBA Digital Business Management</span>
+                <span class="font-body text-xs text-ink/60 block">Indian Institute of Management (IIM) Bodh Gaya</span>
+                <span class="font-body text-xs text-ink/50">2027–2029</span>
+              </div>
+              <div class="bg-peach/25 p-5 rounded-2xl border-l-4 border-orange-300">
+                <span class="font-body font-semibold text-ink text-sm">Class XII – Sunny's Spring Dale School, Bhandara</span>
+                <span class="font-body text-xs text-ink/60 block">CBSE</span>
+                <span class="font-body text-xs text-ink/50">2022–2024 · 91.6%</span>
+              </div>
+              <div class="bg-lavender/25 p-5 rounded-2xl border-l-4 border-purple-300">
+                <span class="font-body font-semibold text-ink text-sm">Class X – Sunflag School, Bhandara</span>
+                <span class="font-body text-xs text-ink/60 block">CBSE</span>
+                <span class="font-body text-xs text-ink/50">2020–2022 · 98.6%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="mt-12">
+          <h3 class="font-display font-semibold text-xl text-ink mb-6">Achievements &amp; Highlights</h3>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-sunshine/25 p-4 rounded-2xl flex items-center gap-3 border border-sunshine/40">
+              <span class="text-lg flex-shrink-0">🏆</span>
+              <span class="font-body text-sm text-ink font-medium">Runner Up – Pitch It Up 2026, IIT Patna</span>
+            </div>
+            <div class="bg-peach/30 p-4 rounded-2xl flex items-center gap-3 border border-peach/50">
+              <span class="text-lg flex-shrink-0">🎤</span>
+              <span class="font-body text-sm text-ink font-medium">Lead Organizer – Mindset Mela 2025</span>
+            </div>
+            <div class="bg-lavender/30 p-4 rounded-2xl flex items-center gap-3 border border-lavender/50">
+              <span class="text-lg flex-shrink-0">🧩</span>
+              <span class="font-body text-sm text-ink font-medium">Structured problem solver</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume CTA -->
+        <div class="mt-12 text-center">
+          <a href="https://drive.google.com/file/d/1Yex0mAjw8YFIsd_3ktQTgMWA3T_joMN2/view?usp=sharing" target="_blank" rel="noopener noreferrer"
+             class="inline-block bg-ink text-white px-9 py-4 rounded-full font-body font-semibold text-sm card-shadow cta-btn wiggle-animation">
+            Download Full Resume
+          </a>
+        </div>
       </div>
-     </div><!-- Resume CTA -->
-     <div class="mt-12 text-center"><a href="https://drive.google.com/drive/folders/1ilf73XtcqoJXcA6-w28FS4nePwLQojrI?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-block bg-ink text-white px-8 py-4 rounded-full font-body font-medium card-shadow hover:scale-105 transition-transform wiggle-animation"> Download Full Resume </a>
-     </div>
-    </div>
-   </section><!-- Contact Section -->
-   <section id="contact" class="py-20 px-6 relative">
-    <div class="max-w-4xl mx-auto">
-     <div class="bg-sunshine p-8 md:p-12 rounded-3xl card-shadow relative" style="transform: rotate(-1deg);"><!-- Paper clip decoration -->
-      <div class="absolute -top-6 left-10 w-8 h-16 border-4 border-ink/30 rounded-full" style="border-bottom: none;"></div>
-      <div class="text-center" style="transform: rotate(1deg);"><span class="font-handwritten text-2xl text-ink/60">let's connect!</span>
-       <h2 class="font-display text-4xl font-bold text-ink mt-2 mb-6">Let's Build Something Meaningful</h2>
-       <p class="font-body text-ink/70 mb-8 max-w-lg mx-auto">I'm always open to conversations about product, strategy, or interesting ideas. Whether it's a mentorship opportunity, collaboration, or just exchanging thoughts—reach out!</p>
-       <div class="flex flex-wrap justify-center gap-3 mb-8"><a id="contact-email-link" href="mailto:adityak12work@gmail.com" class="bg-ink text-white px-6 py-3 rounded-full font-body font-medium hover:scale-105 transition-transform flex items-center gap-2"> <span id="contact-email-text">adityak12work@gmail.com</span> </a> <a id="contact-phone-link" href="tel:+918275298045" class="bg-white text-ink px-6 py-3 rounded-full font-body font-medium hover:scale-105 transition-transform flex items-center gap-2"> <span id="contact-phone-text">+91-8275298045</span> </a>
-       </div>
-       <div class="flex flex-wrap justify-center gap-3"><a href="https://github.com/adityakuranjekar" target="_blank" rel="noopener noreferrer" class="bg-white text-ink px-6 py-3 rounded-full font-body font-medium hover:scale-105 transition-transform flex items-center gap-2"> <span>GitHub</span> </a> <a id="contact-linkedin-link" href="https://www.linkedin.com/in/aditya-kuranjekar-ba572130b/" target="_blank" rel="noopener noreferrer" class="bg-white text-ink px-6 py-3 rounded-full font-body font-medium hover:scale-105 transition-transform flex items-center gap-2"> <span>LinkedIn</span> </a>
-       </div>
-      </div><!-- Corner fold effect -->
-      <div class="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent via-transparent to-canvas" style="clip-path: polygon(100% 0, 100% 100%, 0 100%);"></div>
-     </div><!-- Footer -->
-     <div class="text-center mt-12">
-      <p class="font-body text-sm text-ink/40">Made with and product thinking • © 2025 Aditya Kuranjekar</p>
-      <p class="font-handwritten text-lg text-ink/30 mt-2">Thanks for scrolling!</p>
-     </div>
-    </div>
-   </section>
+    </section>
+
+    <div class="section-divider max-w-5xl w-full"></div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-5 sm:px-8 relative">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-sunshine p-8 sm:p-12 rounded-3xl card-shadow relative" style="transform: rotate(-0.8deg);">
+          <!-- Paper clip decoration -->
+          <div class="absolute -top-6 left-10 w-7 h-14 border-4 border-ink/25 rounded-full" style="border-bottom: none;"></div>
+          <div class="text-center" style="transform: rotate(0.8deg);">
+            <span class="font-handwritten text-xl text-ink/55">let's connect!</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink mt-2 mb-5">Let's Build Something Meaningful</h2>
+            <p class="font-body text-sm sm:text-base text-ink/65 mb-8 max-w-md mx-auto leading-relaxed">
+              I'm always open to conversations about product, strategy, or interesting ideas. Whether it's a mentorship opportunity, collaboration, or just exchanging thoughts—reach out!
+            </p>
+            <div class="flex flex-wrap justify-center gap-3 mb-5">
+              <a id="contact-email-link" href="mailto:adityak12work@gmail.com"
+                 class="bg-ink text-white px-5 py-3 rounded-full font-body font-medium text-sm cta-btn flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+                <span id="contact-email-text">adityak12work@gmail.com</span>
+              </a>
+              <a id="contact-phone-link" href="tel:+918275298045"
+                 class="bg-white text-ink px-5 py-3 rounded-full font-body font-medium text-sm cta-btn flex items-center gap-2 border border-ink/10">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.93v1.99z"/></svg>
+                <span id="contact-phone-text">+91-8275298045</span>
+              </a>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3">
+              <a href="https://github.com/adityakuranjekar" target="_blank" rel="noopener noreferrer"
+                 class="bg-white text-ink px-5 py-3 rounded-full font-body font-medium text-sm cta-btn flex items-center gap-2 border border-ink/10">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+              </a>
+              <a id="contact-linkedin-link" href="https://www.linkedin.com/in/aditya-kuranjekar-ba572130b/" target="_blank" rel="noopener noreferrer"
+                 class="bg-white text-ink px-5 py-3 rounded-full font-body font-medium text-sm cta-btn flex items-center gap-2 border border-ink/10">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>LinkedIn</span>
+              </a>
+              <a id="contact-instagram-link" href="https://www.instagram.com/_aditya.k._12/" target="_blank" rel="noopener noreferrer"
+                 class="bg-white text-ink px-5 py-3 rounded-full font-body font-medium text-sm cta-btn flex items-center gap-2 border border-ink/10">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span>Instagram</span>
+              </a>
+            </div>
+          </div>
+          <!-- Corner fold effect -->
+          <div class="absolute bottom-0 right-0 w-14 h-14 bg-gradient-to-br from-transparent via-transparent to-canvas" style="clip-path: polygon(100% 0, 100% 100%, 0 100%);"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-14">
+          <p class="font-body text-xs text-ink/35 tracking-wide">Made with care and product thinking · © 2025 Aditya Kuranjekar</p>
+          <p class="font-handwritten text-lg text-ink/25 mt-1.5">Thanks for scrolling!</p>
+        </div>
+      </div>
+    </section>
+
   </div>
+
   <script>
     const defaultConfig = {
       hero_name: 'Aditya Kuranjekar',
@@ -521,71 +929,55 @@
     }
 
     async function onConfigChange(config) {
-      // Update hero name
       const heroName = document.getElementById('hero-name');
       if (heroName) heroName.textContent = config.hero_name || defaultConfig.hero_name;
-      
-      // Update hero title
+
       const heroTitle = document.getElementById('hero-title');
-      if (heroTitle) {
-        const title = config.hero_title || defaultConfig.hero_title;
-        heroTitle.innerHTML = title;
-      }
-      
-      // Update hero tagline with sketch underline preserved
+      if (heroTitle) heroTitle.innerHTML = config.hero_title || defaultConfig.hero_title;
+
       const heroTagline = document.getElementById('hero-tagline');
       if (heroTagline) {
         const tagline = config.hero_tagline || defaultConfig.hero_tagline;
         heroTagline.innerHTML = tagline.replace('user-first ', '<span class="sketch-underline">user-first </span>');
       }
-      
-      // Update about intro with highlights preserved
+
       const aboutIntro = document.getElementById('about-intro');
       if (aboutIntro) {
         const intro = config.about_intro || defaultConfig.about_intro;
         aboutIntro.innerHTML = intro
-          .replace('product-first thinker', '<span class="bg-coral/20 px-2 rounded">product-first thinker</span>')
-          .replace('intersection of technology, strategy, and execution', '<span class="bg-coral/20 px-2 rounded">intersection of technology, strategy, and execution</span>');
+          .replace('product-first thinker', '<span class="bg-coral/15 px-2 py-0.5 rounded font-medium text-coral">product-first thinker</span>')
+          .replace('intersection of technology, strategy, and execution', '<span class="bg-coral/15 px-2 py-0.5 rounded font-medium">intersection of technology, strategy, and execution</span>');
       }
-      
-      // Update contact email
+
       const contactEmailLink = document.getElementById('contact-email-link');
       const contactEmailText = document.getElementById('contact-email-text');
       const email = config.contact_email || defaultConfig.contact_email;
       if (contactEmailLink) contactEmailLink.href = `mailto:${email}`;
       if (contactEmailText) contactEmailText.textContent = email;
 
-      // Update contact phone
       const contactPhoneLink = document.getElementById('contact-phone-link');
       const contactPhoneText = document.getElementById('contact-phone-text');
       const phone = config.contact_phone || defaultConfig.contact_phone;
       if (contactPhoneLink) contactPhoneLink.href = `tel:${phone}`;
       if (contactPhoneText) contactPhoneText.textContent = phone;
 
-      // Update contact LinkedIn
       const contactLinkedinLink = document.getElementById('contact-linkedin-link');
       const linkedin = config.contact_linkedin || defaultConfig.contact_linkedin;
       if (contactLinkedinLink) contactLinkedinLink.href = linkedin;
-      
-      // Apply colors
+
       const primaryColor = config.primary_color || defaultConfig.primary_color;
       const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
       const textColor = config.text_color || defaultConfig.text_color;
-      const accentColor = config.accent_color || defaultConfig.accent_color;
-      const highlightColor = config.highlight_color || defaultConfig.highlight_color;
-      
+
       document.body.style.backgroundColor = primaryColor;
       document.querySelectorAll('.bg-white').forEach(el => el.style.backgroundColor = secondaryColor);
       document.querySelectorAll('.text-ink').forEach(el => el.style.color = textColor);
-      
-      // Apply font
+
       const fontFamily = config.font_family || defaultConfig.font_family;
-      const baseFontStack = 'sans-serif';
       document.querySelectorAll('.font-display').forEach(el => {
-        el.style.fontFamily = `${fontFamily}, ${baseFontStack}`;
+        el.style.fontFamily = `${fontFamily}, sans-serif`;
       });
-      
-      // Apply font size scaling
+
       const baseSize = config.font_size || defaultConfig.font_size;
       document.documentElement.style.fontSize = `${baseSize}px`;
     }
@@ -593,35 +985,20 @@
     function mapToCapabilities(config) {
       return {
         recolorables: [
-          {
-            get: () => config.primary_color || defaultConfig.primary_color,
-            set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
-          },
-          {
-            get: () => config.secondary_color || defaultConfig.secondary_color,
-            set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
-          },
-          {
-            get: () => config.accent_color || defaultConfig.accent_color,
-            set: (value) => { config.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); }
-          },
-          {
-            get: () => config.highlight_color || defaultConfig.highlight_color,
-            set: (value) => { config.highlight_color = value; window.elementSdk.setConfig({ highlight_color: value }); }
-          }
+          { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk && window.elementSdk.setConfig({ primary_color: v }); } },
+          { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk && window.elementSdk.setConfig({ secondary_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk && window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk && window.elementSdk.setConfig({ accent_color: v }); } },
+          { get: () => config.highlight_color || defaultConfig.highlight_color, set: (v) => { config.highlight_color = v; window.elementSdk && window.elementSdk.setConfig({ highlight_color: v }); } }
         ],
         borderables: [],
         fontEditable: {
           get: () => config.font_family || defaultConfig.font_family,
-          set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+          set: (v) => { config.font_family = v; window.elementSdk && window.elementSdk.setConfig({ font_family: v }); }
         },
         fontSizeable: {
           get: () => config.font_size || defaultConfig.font_size,
-          set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+          set: (v) => { config.font_size = v; window.elementSdk && window.elementSdk.setConfig({ font_size: v }); }
         }
       };
     }
@@ -638,29 +1015,40 @@
       ]);
     }
 
-    // Initialize SDK
     if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities,
-        mapToEditPanelValues
-      });
+      window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
     } else {
       onConfigChange(defaultConfig);
     }
 
-    // Smooth scroll for navigation
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d108b06a5b594b2',t:'MTc3MTYxNzEzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
 
+    // Subtle scroll-triggered fade-up for cards
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = entry.target.dataset.baseTransform || 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.experience-card, .project-card, .stamp-card').forEach(el => {
+        el.style.transition = 'opacity 0.45s ease-out, transform 0.45s ease-out, box-shadow 0.2s ease-out';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        observer.observe(el);
+      });
+    }
+  </script>
+ </body>
+</html>
